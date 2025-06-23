@@ -7,7 +7,6 @@ Welcome to the `SecurityDemo` project — a deliberately vulnerable ASP.NET Core
 | Tool              | Purpose                              |
 |-------------------|---------------------------------------|
 | 🔒 Semgrep        | Static code analysis (SAST) for C#    |
-| 🛡️ CodeQL         | GitHub-native SAST for C#             |
 | 🧪 OWASP DepCheck | Dependency vulnerability scanning     |
 | 🔐 Gitleaks       | Hardcoded secret detection            |
 | 🧹 dotnet-format  | Code style & formatting enforcement   |
@@ -28,11 +27,6 @@ Welcome to the `SecurityDemo` project — a deliberately vulnerable ASP.NET Core
 ### ✅ Gitleaks
 - Scans for secrets like `sk_test_*`, `Password=...`, AWS keys, etc.
 - Triggers on every commit and PR.
-
-### ✅ CodeQL
-- Runs GitHub’s own static code analysis.
-- Targets C# logic bugs, insecure patterns, injection issues.
-- Outputs results to GitHub → Security → Code scanning alerts.
 
 ### ✅ dotnet-format
 - Enforces clean code structure.
