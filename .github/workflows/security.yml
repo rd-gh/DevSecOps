@@ -60,22 +60,21 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Set JAVA_HOME
-        run: echo "JAVA_HOME=${{ env.JAVA_HOME_17_X64 }}" >> $GITHUB_ENV
+      - name: Set JAVA_HOME for GitHub Action
+        run: echo "JAVA_HOME=${JAVA_HOME_17_X64}" >> $GITHUB_ENV
 
-      - name: Run OWASP Dependency-Check
+      - name: Run OWASP Dependency-Check (SARIF)
         uses: dependency-check/Dependency-Check_Action@main
         with:
           project: "SecurityDemo"
-          path: "."
-          format: "HTML"
+          path: "./S1A"
+          format: "SARIF"
           out: "dependency-report"
 
-      - name: Upload Report
-        uses: actions/upload-artifact@v4
+      - name: Upload SARIF to Code Scanning Alerts
+        uses: github/codeql-action/upload-sarif@v3
         with:
-          name: dependency-check-report
-          path: dependency-report
+          sarif_file: dependency-report/dependency-check-report.sarif
 
   gitleaks:
     name: Secret Scan (Gitleaks)
