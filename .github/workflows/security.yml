@@ -63,13 +63,22 @@ jobs:
         with:
           project: "SecurityDemo"
           path: "./S1A"
-          format: "SARIF"
+          format: "SARIF,HTML"
           out: "dependency-report"
+          args: >
+            --failOnCVSS 7
+            --enableRetired
 
       - name: Upload SARIF to GitHub Code Scanning
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: dependency-report/dependency-check-report.sarif
+
+      - name: Upload Test results
+        uses: actions/upload-artifact@master
+        with:
+           name: Depcheck report
+           path: ${{github.workspace}}/dependency-report
 
   gitleaks:
     name: Secret Scan (Gitleaks)
