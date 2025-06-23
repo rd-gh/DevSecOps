@@ -49,8 +49,9 @@ jobs:
           exit 1
 
   dependency-check-html:
-    name: OWASP Dependency Scan (HTML)
+    name: OWASP Dependency Scan (HTML + Fail on High)
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -63,14 +64,25 @@ jobs:
           format: "HTML"
           out: "dependency-report"
           args: >
-            --failOnCVSS 7
             --enableRetired
+            --out dependency-report
 
-      - name: Upload Test results
-        uses: actions/upload-artifact@master
+      - name: Upload HTML Report
+        uses: actions/upload-artifact@v4
         with:
-           name: Depcheck report
-           path: ${{github.workspace}}/dependency-report
+          name: Depcheck-report
+          path: dependency-report
+
+      - name: Fail job if high vulnerabilities found
+        run: |
+          count=$(grep -o 'High</th><td>[1-9][0-9]*' dependency-report/dependency-check-report.html | grep -o '[0-9]*$')
+          echo "Found $count high severity vulnerabilities"
+          if [ "$count" -gt 0 ]; then
+            echo "❌ High vulnerabilities found. Failing the job."
+            exit 1
+          else
+            echo "✅ No high vulnerabilities found."
+          fi
   
   dependency-check-sarif:
     name: OWASP Dependency Scan SARIF
