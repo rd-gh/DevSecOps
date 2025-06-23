@@ -15,7 +15,6 @@ permissions:
   security-events: write
 
 jobs:
-jobs:
   semgrep:
     name: Semgrep SAST (C#)
     runs-on: ubuntu-latest
