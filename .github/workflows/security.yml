@@ -52,16 +52,19 @@ jobs:
     name: OWASP Dependency Scan
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Set up Java
+        id: setup-java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
 
-      - name: Set JAVA_HOME for GitHub Action
-        run: echo "JAVA_HOME=${JAVA_HOME_17_X64}" >> $GITHUB_ENV
+      - name: Export JAVA_HOME for dependency-check
+        run: |
+          echo "JAVA_HOME=${{ steps.setup-java.outputs.path }}" >> $GITHUB_ENV
 
       - name: Run OWASP Dependency-Check (SARIF)
         uses: dependency-check/Dependency-Check_Action@main
