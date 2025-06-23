@@ -48,7 +48,7 @@ jobs:
           echo "❌ Semgrep found security issues."
           exit 1
 
-    dependency-check-html:
+  dependency-check-html:
     name: OWASP Dependency Scan (HTML)
     runs-on: ubuntu-latest
     steps:
