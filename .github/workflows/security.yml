@@ -15,6 +15,7 @@ permissions:
   security-events: write
 
 jobs:
+jobs:
   semgrep:
     name: Semgrep SAST (C#)
     runs-on: ubuntu-latest
@@ -24,7 +25,7 @@ jobs:
         with:
           config: https://semgrep.dev/p/csharp
           generateSarif: true
-          output: semgrep-results
+          output: semgrep-results  # <- no ".sarif"
       - name: Upload Semgrep SARIF
         uses: github/codeql-action/upload-sarif@v3
         with:
