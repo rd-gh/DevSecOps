@@ -48,8 +48,37 @@ jobs:
           echo "❌ Semgrep found security issues."
           exit 1
 
-  dependency-check:
-    name: OWASP Dependency Scan (Prebuilt)
+    dependency-check-html:
+    name: OWASP Dependency Scan (HTML)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Run Dependency-Check (HTML)
+        uses: dependency-check/Dependency-Check_Action@main
+        with:
+          project: "SecurityDemo"
+          path: "./S1A"
+          format: "HTML"
+          out: "dependency-report"
+          args: >
+            --failOnCVSS 7
+            --enableRetired
+
+      - name: Upload HTML Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: owasp-html-report
+          path: dependency-report/dependency-check-report.html
+  
+  dependency-check-sarif:
+    name: OWASP Dependency Scan SARIF
     runs-on: ubuntu-latest
 
     steps:
@@ -73,12 +102,6 @@ jobs:
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: dependency-report/dependency-check-report.sarif
-
-      - name: Upload Test results
-        uses: actions/upload-artifact@master
-        with:
-           name: Depcheck report
-           path: ${{github.workspace}}/dependency-report
 
   gitleaks:
     name: Secret Scan (Gitleaks)
