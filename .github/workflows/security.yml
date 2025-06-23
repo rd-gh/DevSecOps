@@ -66,11 +66,11 @@ jobs:
             --failOnCVSS 7
             --enableRetired
 
-      - name: Upload HTML Report
-        uses: actions/upload-artifact@v4
+      - name: Upload Test results
+        uses: actions/upload-artifact@master
         with:
-          name: owasp-html-report
-          path: dependency-report/dependency-check-report.html
+           name: Depcheck report
+           path: ${{github.workspace}}/dependency-report
   
   dependency-check-sarif:
     name: OWASP Dependency Scan SARIF
@@ -85,7 +85,7 @@ jobs:
         with:
           project: "SecurityDemo"
           path: "./S1A"
-          format: "SARIF,HTML"
+          format: "SARIF"
           out: "dependency-report"
           args: >
             --failOnCVSS 7
