@@ -27,6 +27,8 @@ jobs:
           entryPoint: semgrep
           args: >
             --config=https://semgrep.dev/p/csharp
+            --config=https://semgrep.dev/p/owasp-top-ten
+            --config=https://semgrep.dev/p/security-audit
             --sarif
             --output=semgrep-results.sarif
 
