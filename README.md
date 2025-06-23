@@ -6,11 +6,8 @@ Welcome to the `SecurityDemo` project — a deliberately vulnerable ASP.NET Core
 
 | Tool              | Purpose                              |
 |-------------------|---------------------------------------|
-| 🛡️ CodeQL         | GitHub-native SAST for C#             |
-
-| Tool              | Purpose                              |
-|-------------------|---------------------------------------|
 | 🔒 Semgrep        | Static code analysis (SAST) for C#    |
+| 🛡️ CodeQL         | GitHub-native SAST for C#             |
 | 🧪 OWASP DepCheck | Dependency vulnerability scanning     |
 | 🔐 Gitleaks       | Hardcoded secret detection            |
 | 🧹 dotnet-format  | Code style & formatting enforcement   |
