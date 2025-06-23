@@ -49,20 +49,20 @@ jobs:
           exit 1
 
   dependency-check:
-    name: OWASP Dependency Scan
+    name: OWASP Dependency Scan (Prebuilt)
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repository
+      - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Set up Java
-        id: setup-java
+      - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
 
-      - name: Run OWASP Dependency-Check (SARIF)
+      - name: Run OWASP Dependency-Check
         uses: dependency-check/Dependency-Check_Action@main
         with:
           project: "SecurityDemo"
@@ -70,8 +70,8 @@ jobs:
           format: "SARIF"
           out: "dependency-report"
         env:
-          JAVA_HOME: ${{ steps.setup-java.outputs.path }}
-          PATH: ${{ steps.setup-java.outputs.path }}/bin:${{ env.PATH }}
+          JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17*/x64
+          PATH: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17*/x64/bin:${{ env.PATH }}
 
       - name: Upload SARIF to GitHub Code Scanning
         uses: github/codeql-action/upload-sarif@v3
