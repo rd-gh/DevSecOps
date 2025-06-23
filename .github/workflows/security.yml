@@ -30,33 +30,33 @@ jobs:
         with:
           sarif_file: semgrep-results.sarif
 
-dependency-check:
-  name: OWASP Dependency Scan
-  runs-on: ubuntu-latest
-  steps:
-    - uses: actions/checkout@v4
+  dependency-check:
+    name: OWASP Dependency Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
-    - uses: actions/setup-java@v4
-      with:
-        distribution: temurin
-        java-version: '17'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
 
-    - name: Set JAVA_HOME
-      run: echo "JAVA_HOME=$JAVA_HOME" >> $GITHUB_ENV
+      - name: Set JAVA_HOME
+        run: echo "JAVA_HOME=$JAVA_HOME" >> $GITHUB_ENV
 
-    - name: Run OWASP Dependency-Check
-      uses: dependency-check/Dependency-Check_Action@main
-      with:
-        project: "SecurityDemo"
-        scanPath: "."
-        format: "HTML"
-        out: "dependency-report"
+      - name: Run OWASP Dependency-Check
+        uses: dependency-check/Dependency-Check_Action@main
+        with:
+          project: "SecurityDemo"
+          scanPath: "."
+          format: "HTML"
+          out: "dependency-report"
 
-    - name: Upload Report
-      uses: actions/upload-artifact@v4
-      with:
-        name: dependency-check-report
-        path: dependency-report
+      - name: Upload Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-check-report
+          path: dependency-report
 
   gitleaks:
     name: Secret Scan (Gitleaks)
