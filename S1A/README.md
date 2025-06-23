@@ -1,6 +1,6 @@
 # 🛡️ SecurityDemo: .NET Core App with GitHub Security Pipeline
 
-Welcome to the `SecurityDemo` project — a deliberately vulnerable ASP.NET Core Web API built to showcase a fully automated security pipeline using GitHub Actions 🚀.
+Welcome to the `SecurityDemo` project — a deliberately vulnerable ASP.NET Core Web API built to showcase a fully automated security pipeline using GitHub Actions 🚀.x
 
 ## 🔍 Security Tools Implemented
 
