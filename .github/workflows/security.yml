@@ -51,30 +51,29 @@ jobs:
   dependency-check:
     name: OWASP Dependency Scan
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Java
+      - name: Set up Java 17
         id: setup-java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
 
-      - name: Export JAVA_HOME for dependency-check
-        run: |
-          echo "JAVA_HOME=${{ steps.setup-java.outputs.path }}" >> $GITHUB_ENV
-
-      - name: Run OWASP Dependency-Check (SARIF)
+      - name: Run OWASP Dependency-Check with SARIF output
         uses: dependency-check/Dependency-Check_Action@main
         with:
           project: "SecurityDemo"
           path: "./S1A"
           format: "SARIF"
           out: "dependency-report"
+        env:
+          JAVA_HOME: ${{ steps.setup-java.outputs.path }}
 
-      - name: Upload SARIF to Code Scanning Alerts
+      - name: Upload SARIF to GitHub Code Scanning
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: dependency-report/dependency-check-report.sarif
