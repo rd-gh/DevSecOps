@@ -67,10 +67,14 @@ jobs:
       - name: Install Snyk CLI
         run: npm install -g snyk
 
-      - name: Authenticate Snyk
-        run: snyk auth ${{ secrets.SNYK_TOKEN }}
+      - name: Authenticate Snyk (non-interactive)
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        run: echo "Snyk token set"
 
       - name: Run Snyk test and fail on high vulns
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         run: snyk test --file=S1A/SecurityDemo.csproj --severity-threshold=high --sarif-file-output=snyk.sarif
         continue-on-error: true
 
