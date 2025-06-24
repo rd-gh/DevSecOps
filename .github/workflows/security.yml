@@ -48,65 +48,40 @@ jobs:
           echo "❌ Semgrep found security issues."
           exit 1
 
-  dependency-check-html:
-    name: OWASP Dependency Scan (HTML + Fail on High)
+  snyk:
+    name: Snyk Vulnerability Scan
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Run Dependency-Check (HTML)
-        uses: dependency-check/Dependency-Check_Action@main
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
         with:
-          project: "SecurityDemo"
-          path: "./S1A"
-          format: "HTML"
-          out: "dependency-report"
-          args: >
-            --enableRetired
-            --out dependency-report
+          dotnet-version: '8.0.x'
 
-      - name: Upload HTML Report
-        uses: actions/upload-artifact@v4
-        with:
-          name: Depcheck-report
-          path: dependency-report
+      - name: Restore dependencies
+        run: dotnet restore S1A/SecurityDemo.csproj
 
-      - name: Fail job if high vulnerabilities found
-        run: |
-          count=$(grep -o 'High</th><td>[1-9][0-9]*' dependency-report/dependency-check-report.html | grep -o '[0-9]*$')
-          echo "Found $count high severity vulnerabilities"
-          if [ "$count" -gt 0 ]; then
-            echo "❌ High vulnerabilities found. Failing the job."
-            exit 1
-          else
-            echo "✅ No high vulnerabilities found."
-          fi
-  
-  dependency-check-sarif:
-    name: OWASP Dependency Scan SARIF
-    runs-on: ubuntu-latest
+      - name: Install Snyk CLI
+        run: npm install -g snyk
 
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
+      - name: Authenticate Snyk
+        run: snyk auth ${{ secrets.SNYK_TOKEN }}
 
-      - name: Run OWASP Dependency-Check
-        uses: dependency-check/Dependency-Check_Action@main
-        with:
-          project: "SecurityDemo"
-          path: "./S1A"
-          format: "SARIF"
-          out: "dependency-report"
-          args: >
-            --failOnCVSS 7
-            --enableRetired
+      - name: Run Snyk test and fail on high vulns
+        run: snyk test --file=S1A/SecurityDemo.csproj --severity-threshold=high --sarif-file-output=snyk.sarif
+        continue-on-error: true
 
-      - name: Upload SARIF to GitHub Code Scanning
+      - name: Upload SARIF to GitHub
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: dependency-report/dependency-check-report.sarif
+          sarif_file: snyk.sarif
+
+      - name: Fail job if Snyk found vulnerabilities
+        run: exit 1
+        if: steps.snyk_scan.outcome == 'failure'
 
   gitleaks:
     name: Secret Scan (Gitleaks)
