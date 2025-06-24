@@ -49,37 +49,30 @@ jobs:
           exit 1
 
   snyk:
-    name: Snyk Vulnerability Scan
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: S1A  # 🔑 change working directory
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+      - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
 
-      - name: Restore dependencies
-        run: dotnet restore S1A/SecurityDemo.csproj
+      - name: Restore NuGet packages
+        run: dotnet restore SecurityDemo.csproj
 
       - name: Install Snyk CLI
         run: npm install -g snyk
 
-      - name: Authenticate Snyk (non-interactive)
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        run: echo "Snyk token set"
-
-      - name: Run Snyk scan and generate SARIF (non-blocking)
+      - name: Run Snyk scan (auto-detect package manager)
         id: snyk_scan
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         run: |
           snyk test \
-            --file=S1A/SecurityDemo.csproj \
-            --project-name="SecurityDemo" \
             --severity-threshold=high \
             --sarif-file-output=snyk.sarif
         continue-on-error: true
@@ -87,9 +80,9 @@ jobs:
       - name: Upload SARIF to GitHub
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: snyk.sarif
+          sarif_file: S1A/snyk.sarif
 
-      - name: Fail job if Snyk found vulnerabilities
+      - name: Fail if vulnerabilities found
         run: exit 1
         if: steps.snyk_scan.outcome == 'failure'
 
