@@ -1,6 +1,6 @@
 # 🛡️ SecurityDemo: .NET Core App with GitHub Security Pipeline
 
-This repository showcases a real-world **DevSecOps pipeline** for a .NET Core application using **GitHub Actions**. It integrates modern security tools for **early detection of vulnerabilities**, **secret leakage prevention**, and **code quality enforcement** — all directly within your CI/CD workflow.
+This repository showcases a real-world **DevSecOps pipeline** for a .NET Core application using **GitHub Actions**. It integrates modern security tools for **early detection of vulnerabilities**, **secret leakage prevention**, and **code quality enforcement** — all directly within your CI/CD workflow..
 
 ---
 
