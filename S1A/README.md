@@ -33,7 +33,7 @@ This repository showcases a real-world **DevSecOps pipeline** for a .NET Core ap
   - Fails build if high/critical CVEs are found
   - Uploads SARIF results to GitHub Code Scanning tab
 
-> 📷 _Add screenshot here: `assets/images/snyk-proof.png`_
+> 📷 ![Snyk Proof](assets/images/snyk-proof.png)
 
 ---
 
@@ -48,7 +48,7 @@ This repository showcases a real-world **DevSecOps pipeline** for a .NET Core ap
 - **Output**: SARIF uploaded to GitHub Security tab
 - **Strict Mode**: Causes job to fail on finding issues
 
-> 📷 _Add screenshot here: `assets/images/semgrep-proof.png`_
+> 📷 ![Semgrep Proof](assets/images/semgrep-proof.png)
 
 ---
 
@@ -60,7 +60,7 @@ This repository showcases a real-world **DevSecOps pipeline** for a .NET Core ap
   - Fails job on secret detection
   - Supports license key (optional) via GitHub Secrets
 
-> 📷 _Add screenshot here: `assets/images/gitleaks-proof.png`_
+> 📷 ![Gitleaks Proof](assets/images/gitleaks-proof.png)
 
 ---
 
@@ -75,7 +75,7 @@ This repository showcases a real-world **DevSecOps pipeline** for a .NET Core ap
 - **Job Behavior**:
   - Fails job if formatting issues or code hygiene issues are found
 
-> 📷 _Add screenshot here: `assets/images/dotnetformat-proof.png`_
+> 📷 ![Dotnet Format Proof](assets/images/dotnetformat-proof.png)
 
 ---
 
