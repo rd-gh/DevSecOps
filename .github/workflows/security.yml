@@ -72,10 +72,16 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         run: echo "Snyk token set"
 
-      - name: Run Snyk test and fail on high vulns
+      - name: Run Snyk scan and generate SARIF (non-blocking)
+        id: snyk_scan
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        run: snyk test --file=S1A/SecurityDemo.csproj --severity-threshold=high --sarif-file-output=snyk.sarif
+        run: |
+          snyk test \
+            --file=S1A/SecurityDemo.csproj \
+            --project-name="SecurityDemo" \
+            --severity-threshold=high \
+            --sarif-file-output=snyk.sarif
         continue-on-error: true
 
       - name: Upload SARIF to GitHub
