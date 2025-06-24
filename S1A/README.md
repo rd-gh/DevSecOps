@@ -40,7 +40,7 @@ This repository showcases a real-world **DevSecOps pipeline** for a .NET Core ap
 ### ✅ **Semgrep**
 
 - **Purpose**: Detect insecure coding patterns in C# using customizable rules
-- **Ruleset**: [`https://semgrep.dev/p/csharp`](https://semgrep.dev/p/csharp)
+- **Ruleset**: [`https://semgrep.dev/p/csharp`](https://semgrep.dev/p/csharp), [`https://semgrep.dev/p/owasp-top-ten`](https://semgrep.dev/p/owasp-top-ten), [`https://semgrep.dev/p/security-audit`](https://semgrep.dev/p/security-audit)
 - **Flags**:
   - Use of `HttpClient` over HTTP
   - Hardcoded credentials
