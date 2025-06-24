@@ -67,7 +67,7 @@ jobs:
       - name: Install Snyk CLI
         run: npm install -g snyk
 
-      - name: Run Snyk scan (auto-detect package manager)
+      - name: Run Snyk scan
         id: snyk_scan
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
