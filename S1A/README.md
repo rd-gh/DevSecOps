@@ -1,69 +1,146 @@
 # 🛡️ SecurityDemo: .NET Core App with GitHub Security Pipeline
 
-Welcome to the `SecurityDemo` project — a deliberately vulnerable ASP.NET Core Web API built to showcase a fully automated security pipeline using GitHub Actions 🚀.x
-
-## 🔍 Security Tools Implemented
-
-| Tool              | Purpose                              |
-|-------------------|---------------------------------------|
-| 🔒 Semgrep        | Static code analysis (SAST) for C#    |
-| 🧪 OWASP DepCheck | Dependency vulnerability scanning     |
-| 🔐 Gitleaks       | Hardcoded secret detection            |
-| 🧹 dotnet-format  | Code style & formatting enforcement   |
+This repository showcases a real-world **DevSecOps pipeline** for a .NET Core application using **GitHub Actions**. It integrates modern security tools for **early detection of vulnerabilities**, **secret leakage prevention**, and **code quality enforcement** — all directly within your CI/CD workflow.
 
 ---
 
-## ⚙️ Configuration Details
+## 🛡️ Security Tools Implemented
 
-### ✅ Semgrep
-- Uses [`p/csharp`](https://semgrep.dev/p/csharp) community ruleset.
-- Triggers on PRs and `main` pushes.
-- Output is shown in GitHub Security → Code scanning alerts.
+| Tool             | Purpose                               | Trigger Events              |
+|------------------|----------------------------------------|-----------------------------|
+| 🧪 **Snyk**         | Dependency vulnerability scanning      | ✅ Push to `main`<br>✅ PR to `main` |
+| 🔍 **Semgrep**      | Static Application Security Testing (SAST) | ✅ Push to `main`<br>✅ PR to `main` |
+| 🔐 **Gitleaks**     | Secret detection in source code        | ✅ Push to `main`<br>✅ PR to `main` |
+| 🧹 **dotnet-format**| Code formatting and linting            | ✅ Push to `main`<br>✅ PR to `main` |
 
-### ✅ OWASP Dependency-Check
-- Scans `*.csproj` for known vulnerable NuGet packages.
-- Uses HTML report (downloadable via GitHub Actions artifacts).
-
-### ✅ Gitleaks
-- Scans for secrets like `sk_test_*`, `Password=...`, AWS keys, etc.
-- Triggers on every commit and PR.
-
-### ✅ dotnet-format
-- Enforces clean code structure.
-- Fails CI if spacing, brace style, or line breaks are incorrect.
+📂 **Workflow Location**:  
+`.github/workflows/security.yml`
 
 ---
 
-## 🤔 Why These Checks?
+## 🔧 Configuration Details
 
-- **Semgrep** helps catch insecure coding patterns and logic flaws.
-- **OWASP DC** protects against CVEs in your libraries.
-- **Gitleaks** avoids publishing secrets into version control.
-- **dotnet-format** keeps code consistent and team-friendly.
+### ✅ **Snyk**
 
----
+- **Checks**: `.csproj` and dependencies for known CVEs
+- **Configuration**:
+  ```yaml
+  args: >
+    --severity-threshold=high
+    --sarif-file-output=snyk.sarif
+  ```
+- **Job Behavior**:
+  - Fails build if high/critical CVEs are found
+  - Uploads SARIF results to GitHub Code Scanning tab
 
-## 📈 How to Interpret Results
-
-- Go to the **Actions** tab → Click latest run.
-- View logs for each job:
-  - **Semgrep:** Flags shown in GitHub → Security → Code Scanning Alerts
-  - **Gitleaks:** Logs will show secret matches.
-  - **OWASP DC:** Artifact includes full HTML vulnerability report.
-  - **dotnet-format:** Lists the files with bad formatting.
-
----
-
-## 🧪 Custom Rules or Configurations
-
-- ✅ Intentionally included:
-  - Hardcoded API key in controller
-  - Insecure `http://` call
-  - Old vulnerable version of `Newtonsoft.Json`
-  - Misformatted code
-
-All of these are picked up by the pipeline — check it in action! 🎯
+> 📷 _Add screenshot here: `assets/images/snyk-proof.png`_
 
 ---
 
-Enjoy securing your code! 🔐🧑‍💻
+### ✅ **Semgrep**
+
+- **Purpose**: Detect insecure coding patterns in C# using customizable rules
+- **Ruleset**: [`https://semgrep.dev/p/csharp`](https://semgrep.dev/p/csharp)
+- **Flags**:
+  - Use of `HttpClient` over HTTP
+  - Hardcoded credentials
+  - SQL Injection risk
+- **Output**: SARIF uploaded to GitHub Security tab
+- **Strict Mode**: Causes job to fail on finding issues
+
+> 📷 _Add screenshot here: `assets/images/semgrep-proof.png`_
+
+---
+
+### ✅ **Gitleaks**
+
+- **Purpose**: Detect secrets like API keys, tokens, and passwords
+- **Runs On**: Push & PR to `main`
+- **Behavior**:
+  - Fails job on secret detection
+  - Supports license key (optional) via GitHub Secrets
+
+> 📷 _Add screenshot here: `assets/images/gitleaks-proof.png`_
+
+---
+
+### ✅ **dotnet-format**
+
+- **Purpose**: Ensure secure, clean, and consistent formatting
+- **Target**: `S1A/SecurityDemo.csproj`
+- **Command**:
+  ```bash
+  dotnet-format S1A/SecurityDemo.csproj --check --verbosity diagnostic
+  ```
+- **Job Behavior**:
+  - Fails job if formatting issues or code hygiene issues are found
+
+> 📷 _Add screenshot here: `assets/images/dotnetformat-proof.png`_
+
+---
+
+## 📊 How to Interpret the Results
+
+| Where to Check                               | What You'll See                                |
+|----------------------------------------------|-------------------------------------------------|
+| 🔐 **GitHub → Security → Code Scanning Alerts** | Vulnerabilities from Semgrep and Snyk (SARIF)   |
+| ⚙️ **GitHub Actions → Workflow Runs**           | Logs and job status for all tools               |
+| 📦 **Artifacts** (if uploaded)                 | Optional HTML/SARIF reports to download         |
+
+---
+
+## 🧠 Why These Tools Were Chosen
+
+| Tool           | Reason                                                                 |
+|----------------|------------------------------------------------------------------------|
+| **Snyk**       | Industry-standard for open source dependency scanning (NuGet)          |
+| **Semgrep**    | Rule-based, fast static analysis — great for CI/CD                     |
+| **Gitleaks**   | Prevents credential leaks before they go public                        |
+| **dotnet-format** | Ensures clean, secure, and maintainable code base                    |
+
+---
+
+## ⚙️ Custom Rules & Configurations
+
+| Tool           | Customizations Made                                                   |
+|----------------|------------------------------------------------------------------------|
+| **Snyk**       | SARIF output enabled, `--fail-on high` flag                           |
+| **Semgrep**    | Strict mode enabled, SARIF upload, and custom rule source             |
+| **Gitleaks**   | Environment variable support via GitHub Secret (license key optional) |
+| **dotnet-format** | Targeted specific project for more precise analysis                   |
+
+---
+
+## 📁 Folder Structure & Proofs
+
+```
+.
+├── S1A/
+│   ├── SecurityDemo.csproj
+│   └── Controllers/
+├── .github/
+│   └── workflows/
+│       └── security.yml
+├── assets/
+│   └── images/
+│       ├── snyk-proof.png
+│       ├── semgrep-proof.png
+│       ├── gitleaks-proof.png
+│       └── dotnetformat-proof.png
+└── README.md
+```
+
+---
+
+## 📸 Visual Evidence
+
+| Tool         | Screenshot Placeholder                                  |
+|--------------|----------------------------------------------------------|
+| Snyk         | `assets/images/snyk-proof.png`                          |
+| Semgrep      | `assets/images/semgrep-proof.png`                       |
+| Gitleaks     | `assets/images/gitleaks-proof.png`                      |
+| dotnet-format| `assets/images/dotnetformat-proof.png`                  |
+
+---
+
+> ✅ This README is fully self-contained and reflects your actual setup — all tools run from a single `security.yml`, triggered on push & pull requests to `main`.
