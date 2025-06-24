@@ -115,19 +115,21 @@ This repository showcases a real-world **DevSecOps pipeline** for a .NET Core ap
 
 ```
 .
+├── README.md                   ← Root-level README
 ├── S1A/
+│   ├── README.md               ← Project-specific README
+│   ├── assets/
+│   │   └── images/
+│   │       ├── snyk-proof.png
+│   │       ├── semgrep-proof.png
+│   │       ├── gitleaks-proof.png
+│   │       └── dotnetformat-proof.png
 │   ├── SecurityDemo.csproj
 │   └── Controllers/
-├── .github/
-│   └── workflows/
-│       └── security.yml
-├── assets/
-│   └── images/
-│       ├── snyk-proof.png
-│       ├── semgrep-proof.png
-│       ├── gitleaks-proof.png
-│       └── dotnetformat-proof.png
-└── README.md
+└── .github/
+    └── workflows/
+        └── security.yml
+
 ```
 
 ---
