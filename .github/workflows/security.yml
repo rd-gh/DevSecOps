@@ -52,7 +52,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: S1A  # 🔑 change working directory
+        working-directory: S1A
 
     steps:
       - uses: actions/checkout@v4
@@ -93,6 +93,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: gitleaks/gitleaks-action@v2
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITLEAKS_LICENSE_KEY: ${{ secrets.GITLEAKS_LICENSE_KEY }}
 
   dotnet-lint:
