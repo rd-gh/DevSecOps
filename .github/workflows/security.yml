@@ -3,12 +3,8 @@ name: .NET Security Pipeline
 on:
   push:
     branches: [main]
-    paths:
-      - 'S1A/**'
   pull_request:
     branches: [main]
-    paths:
-      - 'S1A/**'
 
 permissions:
   contents: read
