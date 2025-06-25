@@ -91,6 +91,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITLEAKS_LICENSE_KEY: ${{ secrets.GITLEAKS_LICENSE_KEY }}
+        with:
+            args: detect --source=. --report-format=sarif --report-path=gitleaks.sarif
 
   dotnet-lint:
     name: Linting with dotnet-format
