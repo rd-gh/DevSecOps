@@ -9,8 +9,11 @@ namespace SecurityDemo.Controllers
     public class InsecureController : ControllerBase
     {
         private string apiKey = "sk_test_1234567890abcdef";
-        // GitHub PAT
+
         string githubToken = "ghp_1234567890abcdefghijklmnopqrstuvwxyzABCD";
+        string awsKey = "AKIAIOSFODNN7EXAMPLE";
+        string awsSecret = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY";
+        string slackWebhook = "https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX";
 
         [HttpPost("deserialize")]
         public IActionResult InsecureDeserialization([FromBody] string payload)
