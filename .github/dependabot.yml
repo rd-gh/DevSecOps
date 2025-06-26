@@ -1,0 +1,13 @@
+version: 2
+updates:
+  - package-ecosystem: "nuget"
+    directory: "/"  # Scan entire repo for any .csproj or .sln files
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 0  # Prevent PRs, allow only alerts
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 0
