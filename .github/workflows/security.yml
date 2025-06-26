@@ -85,6 +85,9 @@ jobs:
 
   # Secrets Detection in Github repos
   gitleaks:
+    name: Secret Scan (Gitleaks)
+    runs-on: ubuntu-latest
+    steps:
       - name: Install and Run Gitleaks
         run: |
           GITLEAKS_VERSION=$(curl --silent "https://api.github.com/repos/gitleaks/gitleaks/releases/latest" | jq -r .tag_name)
