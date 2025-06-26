@@ -69,10 +69,10 @@ Security is a first-class citizen in modern software development. GitHub Advance
 
 - All alerts were visible within the **GitHub Security** tab, providing centralized triage capability.
 
+📷 ![GHAS Enable Proof](S1A/assets/ghas-enable-proof.png)
 📷 ![CodeQL Proof](S1A/assets/codeql-proof.png)  
 📷 ![Dependabot Proof](S1A/assets/dependabot-proof.png)  
 📷 ![Secret Scan Proof](S1A/assets/secret-scan-proof.png)
-
 ---
 
 ## 📊 4. Benefits and Challenges
