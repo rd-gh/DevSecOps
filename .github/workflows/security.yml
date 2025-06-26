@@ -94,19 +94,25 @@ jobs:
         run: |
           git fetch --all
 
+      - name: Install Gitleaks
+        run: |
+          curl -sSL https://github.com/gitleaks/gitleaks/releases/latest/download/gitleaks-linux-amd64 -o gitleaks
+          chmod +x gitleaks
+          ./gitleaks version
+
       - name: Run GitLeaks scan on entire repo
         run: |
-          GITLEAKS_VERSION=$(curl --silent "https://api.github.com/repos/gitleaks/gitleaks/releases/latest" | jq -r .tag_name)
-          curl -sSL "https://github.com/gitleaks/gitleaks/releases/download/${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION#v}_linux_x64.tar.gz" -o gitleaks.tar.gz
-          mkdir gitleaks-bin
-          tar -xzf gitleaks.tar.gz -C gitleaks-bin
-          chmod +x gitleaks-bin/gitleaks
-          ./gitleaks-bin/gitleaks detect --source=. --report-format=sarif --report-path=gitleaks-report.sarif --exit-code 0 --redact
+          ./gitleaks detect \
+            --source . \
+            --log-opts="--all" \
+            --report-format sarif \
+            --report-path gitleaks-results.sarif \
+            --verbose
 
       - name: Upload SARIF results to GitHub
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: gitleaks-report.sarif
+          sarif_file: gitleaks-results.sarif
 
   dotnet-lint:
     name: Linting with dotnet-format
