@@ -22,5 +22,17 @@ namespace S1A.Controllers
                 return Ok("User fetched");
             }
         }
+
+        [HttpGet("insecure")]
+        public IActionResult InsecureEndpoint(string userInput)
+        {
+            // ⚠️ Intentional SQL Injection vulnerability
+            var conn = new SqlConnection("Server=localhost;Database=TestDb;Trusted_Connection=True;");
+            conn.Open();
+            var cmd = new SqlCommand("SELECT * FROM Users WHERE name = '" + userInput + "'", conn);
+            var reader = cmd.ExecuteReader();
+
+            return Ok("Query executed (insecurely).");
+        }
     }
 }
