@@ -73,7 +73,6 @@ Security is a first-class citizen in modern software development. GitHub Advance
 📷 ![CodeQL Proof](S1A/assets/images/codeql-proof.png)  
 📷 ![Dependabot Proof](S1A/assets/images/dependabot-proof.png)  
 📷 ![Secret Scan Proof](S1A/assets/images/secret-scan-proof.png)
----
 
 ## 📊 4. Benefits and Challenges
 
