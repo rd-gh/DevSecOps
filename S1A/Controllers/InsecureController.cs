@@ -9,6 +9,8 @@ namespace SecurityDemo.Controllers
     public class InsecureController : ControllerBase
     {
         private string apiKey = "sk_test_1234567890abcdef";
+        // GitHub PAT
+        string githubToken = "ghp_1234567890abcdefghijklmnopqrstuvwxyzABCD";
 
         [HttpPost("deserialize")]
         public IActionResult InsecureDeserialization([FromBody] string payload)
