@@ -89,17 +89,29 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: gitleaks/gitleaks-action@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITLEAKS_LICENSE_KEY: ${{ secrets.GITLEAKS_LICENSE_KEY }}
+
+      - name: Fetch all git references
+        run: |
+          git fetch --all
+
+      - name: Install GitLeaks
+        run: |
+          curl -sSL https://github.com/gitleaks/gitleaks/releases/latest/download/gitleaks-linux-amd64 -o gitleaks
+          chmod +x gitleaks
+
+      - name: Run GitLeaks scan on entire repo
+        run: |
+          ./gitleaks detect \
+            --source . \
+            --log-opts="--all" \
+            --report-format sarif \
+            --report-path gitleaks-results.sarif \
+            --verbose
+
+      - name: Upload SARIF results to GitHub
+        uses: github/codeql-action/upload-sarif@v3
         with:
-          args: >
-            detect
-            --source .
-            --log-opts="--all"
-            --report-format sarif
-            --report-path gitleaks.sarif
+          sarif_file: gitleaks-results.sarif
 
   dotnet-lint:
     name: Linting with dotnet-format
