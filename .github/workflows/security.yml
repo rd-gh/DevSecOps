@@ -111,10 +111,10 @@ jobs:
         run: |
           gitleaks detect \
             --source=. \
-            --report-format=json 
-            --report-path=gitleaks-report.json
+            --report-format=json \
+            --report-path=gitleaks-report.json \
             --verbose \
-            --exit-code=0
+            --exit-code=1
 
       - name: Upload Gitleaks Report
         uses: actions/upload-artifact@v4
