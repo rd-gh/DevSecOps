@@ -89,13 +89,13 @@ jobs:
       - uses: actions/checkout@v4
         with:
             fetch-depth: 0
-      - uses: zricethezav/gitleaks-action@v2
+      - uses: gitleaks/gitleaks-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITLEAKS_LICENSE_KEY: ${{ secrets.GITLEAKS_LICENSE_KEY }}
         with:
           args: >
-            detect --source=. --report-format sarif --report-path=gitleaks.sarif
+            detect --source=. --log-opts="--all" --report-format sarif --report-path=gitleaks.sarif
 
   dotnet-lint:
     name: Linting with dotnet-format
