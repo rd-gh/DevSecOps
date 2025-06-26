@@ -3,8 +3,13 @@
     <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <!-- ❌ Intentionally using an old vulnerable Newtonsoft.Json version -->
+    <PackageReference Include="DotNetZip" Version="1.10.1" />
+    <PackageReference Include="Antlr" Version="3.5.0.2" />
+    <PackageReference Include="System.Net.Http" Version="4.3.0" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.1" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.2" />
+    <PackageReference Include="RestSharp" Version="106.6.10" />
+    <PackageReference Include="bootstrap" Version="3.3.6" />
   </ItemGroup>
 </Project>
