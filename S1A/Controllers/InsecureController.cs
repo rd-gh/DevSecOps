@@ -8,13 +8,18 @@ namespace SecurityDemo.Controllers
     [Route("[controller]")]
     public class InsecureController : ControllerBase
     {
-        // ❌ Hardcoded secret (will be caught by Semgrep and Gitleaks)
         private string apiKey = "sk_test_1234567890abcdef";
+
+        [HttpPost("deserialize")]
+        public IActionResult InsecureDeserialization([FromBody] string payload)
+        {
+            var obj = JsonConvert.DeserializeObject(payload);
+            return Ok("Deserialized");
+        }
 
         [HttpGet("external-call")]
         public async Task<string> GetFromInsecureEndpoint()
         {
-            // ❌ Insecure HTTP usage (Semgrep warning)
             using var client = new HttpClient();
             var result = await client.GetStringAsync("http://example.com/data");
             return result;
