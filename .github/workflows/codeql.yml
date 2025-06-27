@@ -30,6 +30,9 @@ jobs:
         with:
           languages: csharp
 
+      - name: Clean Project
+        run: dotnet clean S1A/SecurityDemo.csproj
+
       - name: Restore dependencies
         run: dotnet restore S1A/SecurityDemo.csproj
 
