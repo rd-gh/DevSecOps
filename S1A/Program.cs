@@ -1,36 +1,19 @@
-using Microsoft.AspNetCore.Mvc;
-using System.Net.Http;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
-namespace SecurityDemo.Controllers
-{
-    [ApiController]
-    [Route("[controller]")]
-    public class InsecureController : ControllerBase
-    {
-        private string apiKey = "sk_test_1234567890abcdef";
+var builder = WebApplication.CreateBuilder(args);
 
-        string githubToken = "ghp_1234567890abcdefghijklmnopqrstuvwxyzABCD";
-        string awsKey = "AKIAIOSFODNN7EXAMPLE";
-        string awsSecret = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY";
-        string slackWebhook = "https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX";
+// Add services to the container
+builder.Services.AddControllers();
 
-        [HttpPost("deserialize")]
-        public IActionResult InsecureDeserialization([FromBody] string payload)
-        {
-            var obj = JsonConvert.DeserializeObject(payload);
-            return Ok("Deserialized");
-        }
+var app = builder.Build();
 
-        [HttpGet("external-call")]
-        public async Task<string> GetFromInsecureEndpoint()
-        {
-            using var client = new HttpClient();
-            var result = await client.GetStringAsync("http://example.com/data");
-            return result;
-        }
+// Configure the HTTP request pipeline
+app.UseHttpsRedirection();
 
-        [HttpGet("unformatted")]public string BadlyFormatted()=> "No space here";
-    }
-}
+app.UseAuthorization();
+
+app.MapControllers();
+
+app.Run();
