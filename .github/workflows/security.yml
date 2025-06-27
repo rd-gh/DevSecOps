@@ -15,7 +15,7 @@ jobs:
   semgrep:
     name: Semgrep SAST (C#)
     runs-on: ubuntu-latest
-    continue-on-error: false  # Fail job if semgrep exits non-zero
+    continue-on-error: false  # Fail job if semgrep exits non-zero code
     steps:
       - uses: actions/checkout@v4
 
