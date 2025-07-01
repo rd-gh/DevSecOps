@@ -10,7 +10,7 @@ namespace SecurityDemo.Controllers
     public class InsecureController : ControllerBase
     {
         private string apiKey = "sk_test_1234567890abcdef";
-
+        string sonarToken = "squ_b5425f012eb2449f7660c1af78c7fd1f18ebc4c5";
         string githubToken = "ghp_1234567890abcdefghijklmnopqrstuvwxyzABCD";
         string awsKey = "AKIAIOSFODNN7EXAMPLE";
         string awsSecret = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY";
