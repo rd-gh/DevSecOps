@@ -1,0 +1,64 @@
+name: SonarQube Scan with Coverage
+
+on:
+  workflow_dispatch:
+
+jobs:
+  sonar-scan:
+    name: Run SonarQube Analysis
+    runs-on: windows-latest
+
+    env:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Install SonarScanner
+        run: dotnet tool install --global dotnet-sonarscanner
+
+      - name: Add Dotnet Tools to PATH
+        run: echo "${env:USERPROFILE}\.dotnet\tools" | Out-File -Append -FilePath $env:GITHUB_PATH -Encoding utf8
+
+      - name: Install Coverlet.Console
+        run: dotnet tool install --global coverlet.console
+
+      - name: Restore Dependencies
+        run: |
+          dotnet restore S1A/SecurityDemo.csproj
+          dotnet restore S1A.Tests/S1A.Tests.csproj
+
+      - name: Build Test Project
+        run: dotnet build S1A.Tests/S1A.Tests.csproj --configuration Debug
+
+      - name: Run Tests with Coverage
+        run: |
+          coverlet S1A.Tests/bin/Debug/net9.0/S1A.Tests.dll `
+            --target "dotnet" `
+            --targetargs "test S1A.Tests/S1A.Tests.csproj --no-build" `
+            --format opencover `
+            --output coverage.opencover.xml
+
+      - name: Begin SonarQube Analysis
+        run: |
+          dotnet sonarscanner begin `
+            /k:"securitydemo" `
+            /n:"SecurityDemo" `
+            /v:"1.0" `
+            /d:sonar.login="$env:SONAR_TOKEN" `
+            /d:sonar.host.url="https://your-public-sonarqube-server.com" `
+            /d:sonar.cs.opencover.reportsPaths="coverage.opencover.xml" `
+            /d:sonar.sources="S1A" `
+            /d:sonar.verbose=true
+
+      - name: Build Main Project
+        run: dotnet build S1A/SecurityDemo.csproj --no-incremental
+
+      - name: End SonarQube Analysis
+        run: dotnet sonarscanner end /d:sonar.login="$env:SONAR_TOKEN"
