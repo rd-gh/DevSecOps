@@ -56,10 +56,13 @@ jobs:
       - name: Monitor Project in Snyk
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        run: snyk monitor || true
+        run: snyk monitor --file=SecurityDemo.sln --all-projects || true
+
+      - name: Build .NET Project
+        run: dotnet build SecurityDemo.sln --configuration Release
 
       - name: Generate SBOM with Syft (CycloneDX JSON)
-        run: syft dir:. -o cyclonedx-json > sbom.json
+        run: syft dir:./S1A/bin/Release/net9.0 -o cyclonedx-json > sbom.json
 
       - name: Scan SBOM with Grype
         run: grype sbom.json || true
