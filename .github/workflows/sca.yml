@@ -62,7 +62,7 @@ jobs:
         run: dotnet build SecurityDemo.sln --configuration Release
 
       - name: Generate SBOM with Syft (CycloneDX JSON)
-        run: syft dir:./S1A/bin/Release/net9.0 -o cyclonedx-json > sbom.json
+        run: syft dir:S1A/bin/Release/net9.0 dir:S1A.Tests/bin/Release/net9.0 -o cyclonedx-json > sbom.json
 
       - name: Scan SBOM with Grype
         run: grype sbom.json || true
