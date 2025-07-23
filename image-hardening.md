@@ -19,8 +19,8 @@ This project introduces a new Dockerfile (`Dockerfile.hardened`) that applies ha
 
 ### 🔄 Multi-Stage Build
 
-- **Builder Stage**: Uses `mcr.microsoft.com/dotnet/sdk:9.0-preview` for compiling and publishing.
-- **Runtime Stage**: Uses `mcr.microsoft.com/dotnet/aspnet:9.0-preview-slim`, a smaller and more secure base.
+- **Builder Stage**: Uses `mcr.microsoft.com/dotnet/sdk:9.0-bookworm-slim` for compiling and publishing.
+- **Runtime Stage**: Uses `mcr.microsoft.com/dotnet/aspnet:9.0-bookworm-slim`, a smaller and more secure base.
 
 ### 👤 Non-root User
 
@@ -51,7 +51,7 @@ This project introduces a new Dockerfile (`Dockerfile.hardened`) that applies ha
 | Image                               | Size    | Use Case                   | Verdict  |
 |-------------------------------------|---------|-----------------------------|----------|
 | `aspnet:9.0-preview`               | ~230MB  | Full features, bulky        | ❌       |
-| `aspnet:9.0-preview-slim`          | ~130MB  | Lighter, more secure        | ✅       |
+| `aspnet:9.0-bookworm-slim`          | ~225MB  | Lighter, more secure        | ✅       |
 | `Distroless/Alpine`       | ~30-60MB| Ultra secure, .NET breaks   | ⚠️ Compatibility issues |
 
 - Chose `*-slim` for compatibility and reduced attack surface.
@@ -62,7 +62,7 @@ This project introduces a new Dockerfile (`Dockerfile.hardened`) that applies ha
 
 ```Dockerfile
 # Stage 1: Build
-FROM mcr.microsoft.com/dotnet/sdk:9.0-preview AS build
+FROM mcr.microsoft.com/dotnet/sdk:9.0-bookworm-slim AS build
 WORKDIR /src
 
 # Copy only necessary files for restore and build
@@ -76,7 +76,7 @@ COPY . .
 RUN dotnet publish S1A/SecurityDemo.csproj -c Release -o /app/publish
 
 # Stage 2: Final - Runtime
-FROM mcr.microsoft.com/dotnet/aspnet:9.0-preview-slim AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:9.0-bookworm-slim AS runtime
 LABEL maintainer="RD"
 WORKDIR /app
 
@@ -94,8 +94,7 @@ RUN chown -R appuser:appgroup /app
 USER appuser
 
 # Harden image
-RUN chmod -R 755 /app && \
-    rm -rf /usr/share/doc /usr/share/man /var/cache/apt/*
+RUN chmod -R 755 /app
 
 # Expose only needed port
 EXPOSE 80
@@ -112,11 +111,11 @@ ENTRYPOINT ["dotnet", "SecurityDemo.dll"]
 ###  Screenshots
 
 ## Build and Run Slim image
-📷 ![Build and Run Slim image](S1A/assets/images/secret-scan-proof.PNG)
+📷 ![Build and Run Slim image](S1A/assets/images/image-slim-run.PNG)
 
-## Inspect user in alpine container
+## Inspect user in slim container
 
-📷 ![Inspect user in alpine container](S1A/assets/images/secret-scan-proof.PNG)
+📷 ![Inspect user in slim container](S1A/assets/images/image-nonroot-user.PNG)
 
 ## 🚀 4. Benefits of Hardening
 
@@ -137,9 +136,9 @@ Choosing the right base image plays a critical role in balancing **security**, *
 
 ### 🔍 Comparison Table
 
-| Feature / Criteria         | `alpine`                         | `slim` (`aspnet:9.0-preview-slim`)              |
+| Feature / Criteria         | `alpine`                         | `slim` (`aspnet:9.0-bookworm-slim`)              |
 |---------------------------|----------------------------------|--------------------------------------------------|
-| **Size**                  | ~30MB                            | ~130MB                                           |
+| **Size**                  | ~30MB                            | ~225MB                                           |
 | **Security Surface**      | Minimal surface area             | Reduced, but larger than Alpine                  |
 | **Compatibility with .NET** | ❌ Known issues with glibc, dependencies | ✅ Full compatibility with ASP.NET runtime        |
 | **Startup Time**          | Very fast                        | Fast                                             |
@@ -157,7 +156,7 @@ Choosing the right base image plays a critical role in balancing **security**, *
 
 ---
 
-### 📌 Final Choice: `mcr.microsoft.com/dotnet/aspnet:9.0-preview-slim`
+### 📌 Final Choice: `mcr.microsoft.com/dotnet/aspnet:9.0-bookworm-slim`
 
 > "Slim gives us the security of a reduced footprint without sacrificing stability or compatibility with .NET runtime requirements."
 
