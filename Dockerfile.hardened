@@ -31,8 +31,7 @@ RUN chown -R appuser:appgroup /app
 USER appuser
 
 # Harden image
-RUN chmod -R 755 /app && \
-    rm -rf /usr/share/doc /usr/share/man /var/cache/apt/*
+RUN chmod -R 755 /app
 
 # Expose only needed port
 EXPOSE 80
