@@ -1,5 +1,5 @@
 # Stage 1: Build
-FROM mcr.microsoft.com/dotnet/sdk:9.0-preview AS build
+FROM mcr.microsoft.com/dotnet/sdk:9.0-bookworm-slim AS build
 WORKDIR /src
 
 # Copy only necessary files for restore and build
@@ -13,7 +13,7 @@ COPY . .
 RUN dotnet publish S1A/SecurityDemo.csproj -c Release -o /app/publish
 
 # Stage 2: Final - Runtime
-FROM mcr.microsoft.com/dotnet/aspnet:9.0-preview-slim AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:9.0-bookworm-slim AS runtime
 LABEL maintainer="RD"
 WORKDIR /app
 
