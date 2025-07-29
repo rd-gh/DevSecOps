@@ -66,12 +66,6 @@ OWASP ZAP was chosen because it provides:
 - Scanned the Juice Shop demo site (`https://juice-shop.herokuapp.com`).
 - Disabled SSL validation and enabled full alerts in dev environments.
 
-#### Pipeline Execution Screenshot
-![Github DAST Pipeline](<pipeline_run.png>)
-
-#### Scan Artifacts Output
-![Github DAST Pipeline Artifacts](<pipeline_artifacts.png>)
-
 #### GitHub Actions Workflow Configuration
 
 ```yaml
@@ -107,20 +101,13 @@ jobs:
           cmd_options: '-a -z "-config connection.ssl_cert_validation=false"'
           allow_issue_writing: false
 
-      # Rename reports to custom names
-      - name: Rename ZAP Reports
-        run: |
-          mv report_html.html zap-report.html
-          mv report_json.json zap-report.json
-          mv zap.log zap.out
-
       - name: Upload ZAP Report Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: zap-dast-reports
           path: |
-            zap-report.html
-            zap-report.json
+            report_html.html
+            report_json.json
             zap.out
 ```
 
@@ -150,15 +137,15 @@ jobs:
 
 #### ZAP Scan Execution via GitHub Actions
 
-![Pipeline Execution](<pipeline steps.png>)
+![Github DAST Pipeline Execution](</pipeline-run.PNG>)
 
-#### Reports Uploaded as Artifacts
+#### ZAP Scan Report Artifacts
 
-![Pipeline Artifacts](<artifcats from pipline.png>)
+![Github DAST Pipeline Artifacts](</pipeline-scan-artifacts.PNG>)
 
 #### Final ZAP Report
 
-![ZAP Report](<zap report.png>)
+![ZAP Report](</pipeline-scan-report.PNG>)
 
 ---
 
