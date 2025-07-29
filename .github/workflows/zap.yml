@@ -30,18 +30,11 @@ jobs:
           cmd_options: '-a -z "-config connection.ssl_cert_validation=false"'
           allow_issue_writing: false
 
-      # Rename reports to custom names
-      - name: Rename ZAP Reports
-        run: |
-          mv report_html.html zap-report.html
-          mv report_json.json zap-report.json
-          mv zap.log zap.out
-
       - name: Upload ZAP Report Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: zap-dast-reports
           path: |
-            zap-report.html
-            zap-report.json
+            report_html.html
+            report_json.json
             zap.out
